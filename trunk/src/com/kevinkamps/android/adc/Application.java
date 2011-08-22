@@ -1,9 +1,10 @@
+package com.kevinkamps.android.adc;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.Settings;
+import com.kevinkamps.android.adc.util.*;
+
 
 
 public class Application {
@@ -16,11 +17,11 @@ public class Application {
 	 */
 	public Application(String[] args) {
 		Settings.getInstance().overloadSettings(args);
-		String convertFrom = Settings.getInstance().getString(Settings.CONVERT_FROM);
-		String[] convertTo = Settings.getInstance().getString(Settings.CONVERT_TO).split(",");
+		String convertFrom = Settings.getInstance().getString(Settings.CONVERT_SOURCE);
+		String[] convertTo = Settings.getInstance().getString(Settings.CONVERT_DESITNATION).split(",");
 
-		String convertDestination = Settings.getInstance().getString(Settings.CONVERT_DESITNATION);
-		String convertSource = Settings.getInstance().getString(Settings.CONVERT_SOURCE);
+		String convertDestination = Settings.getInstance().getString(Settings.CONVERT_DESITNATION_PATH);
+		String convertSource = Settings.getInstance().getString(Settings.CONVERT_SOURCE_PATH);
 		if(convertSource != null) {
 			source = new File(convertSource);
 			source.mkdirs();
@@ -57,7 +58,7 @@ public class Application {
 			}
 		}
 	}
-
+	
 	/**
 	 * Adds a destination folder
 	 * @param type
@@ -79,8 +80,8 @@ public class Application {
 		if(source != null && destinations.size() > 0) {
 			String convertCommand = Settings.getInstance().getString(Settings.CONVERT_COMMAND);
 
-			String convertFrom = Settings.getInstance().getString(Settings.CONVERT_FROM);
-			String[] convertTo = Settings.getInstance().getString(Settings.CONVERT_TO).split(",");
+			String convertFrom = Settings.getInstance().getString(Settings.CONVERT_SOURCE);
+			String[] convertTo = Settings.getInstance().getString(Settings.CONVERT_DESITNATION).split(",");
 
 
 			File[] files = source.listFiles(new PngFileFilter());
@@ -110,7 +111,11 @@ public class Application {
 				}
 			}
 		} else {
-			throw new IllegalStateException("Your config was not correct");
+			if(source == null) {
+				throw new IllegalStateException("Could not find source folder. Please make sure that the source exists");
+			} else {
+				throw new IllegalStateException("Could not find destination folders. Please make sure that the destinations exists");
+			}
 		}
 
 		System.out.println(String.format("Converting(100%%): %1$s successful - %2$s failed.", counterSuccessful, counterFailed));
@@ -125,6 +130,7 @@ public class Application {
 			app.convert();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package util;
+package com.kevinkamps.android.adc.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,11 +14,11 @@ import java.util.Map;
  */
 public class Settings {
 
-	public static final String CONVERT_FROM = "convert_from";
-	public static final String CONVERT_TO = "convert_to";
-	public static final String CONVERT_COMMAND = "convert_command";
 	public static final String CONVERT_SOURCE = "convert_source";
 	public static final String CONVERT_DESITNATION = "convert_destination";
+	public static final String CONVERT_COMMAND = "convert_command";
+	public static final String CONVERT_SOURCE_PATH = "convert_source_path";
+	public static final String CONVERT_DESITNATION_PATH = "convert_destination_path";
 	
 	private static final String DELIMITER = "=";
 	private static final String COMMENT  = "#";
