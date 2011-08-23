@@ -28,6 +28,10 @@ public class Settings {
 	private static Settings instance = null;
 	Map<String, String> settings;
 	
+	/**
+	 * Constructor
+	 * @return
+	 */
 	public static final Settings getInstance() {
 		if(instance == null) {
 			instance = new Settings();
