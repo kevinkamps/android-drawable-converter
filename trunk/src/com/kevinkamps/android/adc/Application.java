@@ -3,6 +3,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.kevinkamps.android.adc.draw9patch.Draw9PatchConverter;
+import com.kevinkamps.android.adc.draw9patch.Draw9PatchFileFilter;
+import com.kevinkamps.android.adc.png.PngConverter;
+import com.kevinkamps.android.adc.png.PngFileFilter;
 import com.kevinkamps.android.adc.util.*;
 
 /**
@@ -54,14 +58,14 @@ public class Application {
 			}
 			if(convertDestinationPath != null) {
 				for (String type : convertDestination) {
-					File resFile = new File(convertDestinationPath+File.separator+type);
+					File resFile = new File(convertDestinationPath + File.separator + type);
 					resFile.mkdirs();
 					addDestination(type, resFile);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds a destination folder
 	 * @param type
@@ -75,39 +79,46 @@ public class Application {
 	/**
 	 * Starts converting of files in the source folder into the destination folders
 	 */
-	public void convert() {
+	public void start() {
 		int counterSuccessful = 0;
 		int counterFailed = 0;
+		long startedConverting = System.currentTimeMillis();
 		System.out.println("Start convert");
 
 		if(source != null && destinations.size() > 0) {
-			String convertCommand = Settings.getInstance().getString(Settings.CONVERT_COMMAND);
-
-			String convertSource = Settings.getInstance().getString(Settings.CONVERT_SOURCE);
+			//			String convertCommand = Settings.getInstance().getString(Settings.CONVERT_COMMAND);
+			//
+			//			String convertSource = Settings.getInstance().getString(Settings.CONVERT_SOURCE);
 			String[] convertDestinations = Settings.getInstance().getString(Settings.CONVERT_DESITNATION).split(",");
 
 
-			File[] files = source.listFiles(new PngFileFilter());
-			final int totalFiles = convertDestinations.length * files.length;
+			File[] pngFiles = source.listFiles(new PngFileFilter());
+			File[] draw9PatchFiles = source.listFiles(new Draw9PatchFileFilter());
+			final int totalFiles = convertDestinations.length * (pngFiles.length + draw9PatchFiles.length);
 
 			//Convert the source for each type
 			for (String destination: convertDestinations) {
-
-				Float sourceSize = Settings.getInstance().getFloat(convertSource);
-				Float destinationSize = Settings.getInstance().getFloat(destination);
-				Float pctResize = destinationSize/sourceSize * 100;
-
 				//get the destination folder for the destination type
-				File destinationFile = destinations.get(destination);
+				File destinationDir = destinations.get(destination);
 				try {
-					for (File file : files) {
-						final String destFile = String.format("%s%s%s",destinationFile.getAbsolutePath(), File.separator, file.getName());
-						Runtime rt = Runtime.getRuntime();
-						final String cmd = String.format(convertCommand, file.getAbsolutePath(), destFile, pctResize+"%");
-						Process pr = rt.exec(cmd);
-						pr.waitFor();
+					PngConverter pngConverter = new PngConverter(destination);					
+					for (File file : pngFiles) {
+						long start = System.currentTimeMillis();
+						pngConverter.convert(file, destinationDir);
 						counterSuccessful++;
-						System.out.println(String.format("Converting(%s%%): %s", (int)((float)(counterSuccessful+counterFailed)/totalFiles*100), cmd));
+						long time = (System.currentTimeMillis() - start);
+						System.out.println(String.format("Converting(%s%%): %s (in %sms)", (int)((float)(counterSuccessful+counterFailed)/totalFiles*100), file.getName(), time));
+					}
+
+					Draw9PatchConverter draw9PatchConverter = new Draw9PatchConverter(destination);
+					for (File file : draw9PatchFiles) {
+						long start = System.currentTimeMillis();
+//						if(file.getAbsolutePath().endsWith("top_bar_background.9.png")) {
+						draw9PatchConverter.convert(file, destinationDir);
+						counterSuccessful++;
+						long time = (System.currentTimeMillis() - start);
+						System.out.println(String.format("Converting(%s%%): %s (in %sms)", (int)((float)(counterSuccessful+counterFailed)/totalFiles*100), file.getName(), time));
+//						}
 					}
 				} catch (Exception e) {
 					counterFailed++;
@@ -122,7 +133,13 @@ public class Application {
 			}
 		}
 
-		System.out.println(String.format("Converting finished: %1$s successful - %2$s failed.", counterSuccessful, counterFailed));
+		long time = (System.currentTimeMillis() - startedConverting);
+		System.out.println(
+				String.format(
+						"Converting finished: %1$s successful - %2$s failed. (in %3$sms)"
+						, counterSuccessful, counterFailed, time
+				)
+		);
 	}
 
 	/**
@@ -132,7 +149,7 @@ public class Application {
 	public static void main(String[] args) {
 		try {
 			Application app = new Application(args);
-			app.convert();
+			app.start();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();

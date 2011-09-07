@@ -20,6 +20,8 @@ public class Settings {
 	public static final String CONVERT_SOURCE_PATH = "convert_source_path";
 	public static final String CONVERT_DESITNATION_PATH = "convert_destination_path";
 	
+	public static final String TMP_DIR = "tmp_dir";
+	
 	private static final String DELIMITER = "=";
 	private static final String COMMENT  = "#";
 	
