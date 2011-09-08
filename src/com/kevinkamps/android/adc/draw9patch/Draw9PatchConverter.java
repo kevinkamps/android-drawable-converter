@@ -63,6 +63,12 @@ public class Draw9PatchConverter extends Converter {
 		cleanupTmpDir();
 	}
 	
+	/**
+	 * 
+	 * @param resizedStripped
+	 * @param lines
+	 * @return
+	 */
 	private File recreateResized9Patch(File resizedStripped, List<Line> lines ) {
 		BufferedImage resizedStrippedImage = readImage(resizedStripped);
 		final int width = resizedStrippedImage.getWidth();
