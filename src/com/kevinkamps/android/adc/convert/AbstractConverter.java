@@ -1,15 +1,16 @@
-package com.kevinkamps.android.adc;
+package com.kevinkamps.android.adc.convert;
 
 import java.io.File;
 import java.io.IOException;
 
 import com.kevinkamps.android.adc.util.Settings;
 
-public abstract class Converter {
+
+public abstract class AbstractConverter {
 	private final Float sourceSize;
 	private final Float destinationSize;
 	
-	public Converter(String destination) {
+	public AbstractConverter(String destination) {
 		String convertSource = Settings.getInstance().getString(Settings.CONVERT_SOURCE);
 		
 		sourceSize = Settings.getInstance().getFloat(convertSource);

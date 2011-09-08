@@ -3,10 +3,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.kevinkamps.android.adc.draw9patch.Draw9PatchConverter;
-import com.kevinkamps.android.adc.draw9patch.Draw9PatchFileFilter;
-import com.kevinkamps.android.adc.png.PngConverter;
-import com.kevinkamps.android.adc.png.PngFileFilter;
+import com.kevinkamps.android.adc.convert.draw9patch.Draw9PatchConverter;
+import com.kevinkamps.android.adc.convert.draw9patch.Draw9PatchFileFilter;
+import com.kevinkamps.android.adc.convert.png.PngConverter;
+import com.kevinkamps.android.adc.convert.png.PngFileFilter;
 import com.kevinkamps.android.adc.util.*;
 
 /**

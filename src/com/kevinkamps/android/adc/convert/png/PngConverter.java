@@ -1,10 +1,10 @@
-package com.kevinkamps.android.adc.png;
+package com.kevinkamps.android.adc.convert.png;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.kevinkamps.android.adc.Converter;
+import com.kevinkamps.android.adc.convert.AbstractConverter;
 import com.kevinkamps.android.adc.util.*;
 
 /**
@@ -12,7 +12,7 @@ import com.kevinkamps.android.adc.util.*;
  * @author Kevin Kamps
  *
  */
-public class PngConverter extends Converter {
+public class PngConverter extends AbstractConverter {
 
 	/**
 	 * Constructor

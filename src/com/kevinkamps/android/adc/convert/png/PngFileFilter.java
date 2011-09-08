@@ -1,21 +1,21 @@
-package com.kevinkamps.android.adc.draw9patch;
+package com.kevinkamps.android.adc.convert.png;
 import java.io.File;
 
 import java.io.FileFilter;
 
 
 /**
- * draw nine patch file filter
+ * PNG file filter that excludes draw nine patch files
  * 
  * @author Kevin Kamps
  */
-public class Draw9PatchFileFilter implements FileFilter {
+public class PngFileFilter implements FileFilter {
 	/* (non-Javadoc)
 	 * @see java.io.FileFilter#accept(java.io.File)
 	 */
 	@Override
 	public boolean accept(File f) {
-		if(f.getAbsolutePath().endsWith(".9.png")) {
+		if(f.getAbsolutePath().endsWith(".png") && !f.getAbsolutePath().endsWith(".9.png")) {
 			return true;
 		}
 		return false;

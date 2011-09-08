@@ -1,4 +1,4 @@
-package com.kevinkamps.android.adc.draw9patch;
+package com.kevinkamps.android.adc.convert.draw9patch;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import com.kevinkamps.android.adc.Converter;
+import com.kevinkamps.android.adc.convert.AbstractConverter;
 import com.kevinkamps.android.adc.util.*;
 
 /**
@@ -17,7 +17,7 @@ import com.kevinkamps.android.adc.util.*;
  * @author Kevin Kamps
  *
  */
-public class Draw9PatchConverter extends Converter {
+public class Draw9PatchConverter extends AbstractConverter {
 
 	private String tmpDir;
 
