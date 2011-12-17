@@ -29,16 +29,11 @@ public class Application {
 
 		String convertDestinationPath = Settings.getInstance().getString(Settings.CONVERT_DESITNATION_PATH);
 		String convertSourcePath = Settings.getInstance().getString(Settings.CONVERT_SOURCE_PATH);
-		if(convertSourcePath != null) {
-			source = new File(convertSourcePath);
-			source.mkdirs();
-			System.out.println("Source folder: "+source.getAbsolutePath());
-		}
 		destinations = new HashMap<String, File>();
 
-		File f = new File("res");
-		if(f.isDirectory()) {
-			File[] resFiles = f.listFiles();
+		File res = new File("res");
+		if(res.isDirectory() && convertDestinationPath == null && convertSourcePath == null) {
+			File[] resFiles = res.listFiles();
 			for (File resFile : resFiles) {
 				if(resFile.isDirectory()) {
 					if(source == null && resFile.getName().contains("drawable") && resFile.getName().contains("-"+convertSource)) {
@@ -46,24 +41,49 @@ public class Application {
 						System.out.println("Source folder: "+resFile.getAbsolutePath());
 					}
 
-					if(convertDestinationPath == null) {
-						for (String type : convertDestination) {
-
-							if(resFile.getName().contains("drawable") && resFile.getName().contains("-"+type)) {
-								addDestination(type, resFile);
-							}
+					//get destinations
+					for (String type : convertDestination) {
+						if(resFile.getName().contains("drawable") && resFile.getName().contains("-"+type)) {
+							addDestination(type, resFile);
 						}
 					}
 				}
 			}
-			if(convertDestinationPath != null) {
-				for (String type : convertDestination) {
-					File resFile = new File(convertDestinationPath + File.separator + type);
-					resFile.mkdirs();
-					addDestination(type, resFile);
+
+			String[] convertDestinations = Settings.getInstance().getString(Settings.CONVERT_DESITNATION).split(",");
+			for (String destinationType: convertDestinations) {
+				File destinationFile = destinations.get(destinationType);
+				if(destinationFile == null) {
+					destinationFile = new File(res.getAbsoluteFile() + File.separator + "drawable-"+destinationType);
+					destinationFile.mkdirs();
+					addDestination(destinationType, destinationFile);
+				}
+			}
+		} else if(convertDestinationPath != null && convertSourcePath != null) {
+			source = new File(convertSourcePath);
+			for (String type : convertDestination) {
+				File resFile = new File(convertDestinationPath + File.separator + "drawable-"+type);
+				resFile.mkdirs();
+				addDestination(type, resFile);
+			}
+		} else { // error handling
+			if(!res.isDirectory() && convertDestinationPath == null && convertSourcePath == null) {
+				System.out.println("Res folder could not be found!");
+			} else {
+				if(convertDestinationPath == null ) {
+					System.out.println("convert_destination_path is not filled in");
+				}
+				if(convertSourcePath == null ) {
+					System.out.println("convert_source_path is not filled in!");
 				}
 			}
 		}
+
+		if(!source.exists()) {
+			System.out.println("Source folder does not exists!");
+		}
+		
+		
 	}
 
 	/**
