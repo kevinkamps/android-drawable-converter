@@ -4,12 +4,10 @@ Please feel free do add some comments if you have anything to add to this list
 
 
 == To do ==
-  * Support for 9.png files * (Currently working on it) *
 
 
 == Work in progress ==
 
-  * Support for 9.png files
 
 == Wishlist ==
 _none_
