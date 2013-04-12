@@ -1,3 +1,7 @@
+== Version 2.0.1 ==
+ * Added some code that give some hints if conversion of a png || 9.png file fails.
+ * The program now will continue converting if a failure occurs. Previously it skipped files.
+
 == Version 2.0.0 ==
  * Support for draw9patch (9.png) files.
  * Fixed: If some folder did not exist then an exception occurred. Destination folder are now automatically created.
