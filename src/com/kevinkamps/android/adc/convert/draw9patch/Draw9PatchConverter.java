@@ -225,8 +225,11 @@ public class Draw9PatchConverter extends AbstractConverter {
 		BufferedImage img = null;
 		try {
 			img = ImageIO.read(file);
-		} catch (IOException e) {
-			e.printStackTrace();
+			if(img.getWidth() <= 0 || img.getHeight() <= 0) {
+				throw new Exception("Your image doesn't appear to have any pixels: width="+img.getWidth() + " height:"+img.getHeight());
+			}
+		} catch (Exception e) {
+			throw new RuntimeException("'" + file.getAbsolutePath() + "' could not be read. Is your image there? Is it not corrupted and of the correct type? And has the image a width and height greater than 0 pixels?", e);
 		}
 		return img;
 	}
