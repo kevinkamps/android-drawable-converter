@@ -123,21 +123,35 @@ public class Application {
 				try {
 					PngConverter pngConverter = new PngConverter(destination);					
 					for (File file : pngFiles) {
-						long start = System.currentTimeMillis();
-						pngConverter.convert(file, destinationDir);
-						counterSuccessful++;
-						long time = (System.currentTimeMillis() - start);
-						System.out.println(String.format("Converting(%s%%): %s (in %sms)", (int)((float)(counterSuccessful+counterFailed)/totalFiles*100), file.getName(), time));
+						try {
+							long start = System.currentTimeMillis();
+							pngConverter.convert(file, destinationDir);
+							counterSuccessful++;
+							long time = (System.currentTimeMillis() - start);
+							System.out.println(String.format("Converting(%s%%): %s (in %sms)", (int)((float)(counterSuccessful+counterFailed)/totalFiles*100), file.getName(), time));
+						} catch (Exception e) {
+							counterFailed++;
+							System.out.println(String.format("Converting failed: %s to %s", file.getAbsolutePath(), destinationDir.getAbsolutePath()));
+							e.printStackTrace();
+						}
 					}
 
 					Draw9PatchConverter draw9PatchConverter = new Draw9PatchConverter(destination);
 					for (File file : draw9PatchFiles) {
-						long start = System.currentTimeMillis();
+						
 //						if(file.getAbsolutePath().endsWith("top_bar_background.9.png")) {
-						draw9PatchConverter.convert(file, destinationDir);
-						counterSuccessful++;
-						long time = (System.currentTimeMillis() - start);
-						System.out.println(String.format("Converting(%s%%): %s (in %sms)", (int)((float)(counterSuccessful+counterFailed)/totalFiles*100), file.getName(), time));
+						try {
+							long start = System.currentTimeMillis();
+							draw9PatchConverter.convert(file, destinationDir);
+							counterSuccessful++;
+							long time = (System.currentTimeMillis() - start);
+							System.out.println(String.format("Converting(%s%%): %s (in %sms)", (int)((float)(counterSuccessful+counterFailed)/totalFiles*100), file.getName(), time));
+						} catch (Exception e) {
+							counterFailed++;
+							System.out.println(String.format("Converting(%s%%): conversion failed: %s to %s", (int)((float)(counterSuccessful+counterFailed)/totalFiles*100), file.getAbsolutePath(), destinationDir.getAbsolutePath()));
+							e.printStackTrace();
+						}
+						
 //						}
 					}
 				} catch (Exception e) {
